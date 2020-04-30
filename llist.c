@@ -1,21 +1,24 @@
 
 #include "collections_header.h"
 
+void	ft_init_llist(t_llist	*llist, void (*func_del)(void *))
+{
+	llist->start.next = &llist->end;
+	llist->start.prev = &llist->end;
+	llist->end.next = &llist->start;
+	llist->end.prev = &llist->start;
+	llist->current = &llist->start;
+	llist->func_del = func_del;
+	llist->elems_count = 0;
+}
+
 t_llist	*ft_create_llist(void (*func_del)(void *))
 {
 	t_llist	*llist;
 
 	llist = ft_memalloc(sizeof(t_llist));
 	if (llist)
-	{
-		llist->start.next = &llist->end;
-		llist->start.prev = &llist->end;
-		llist->end.next = &llist->start;
-		llist->end.prev = &llist->start;
-		llist->current = &llist->start;
-		llist->func_del = func_del;
-		llist->elems_count = 0;
-	}
+		ft_init_llist(llist, func_del);
 	return (llist);
 }
 
@@ -108,12 +111,18 @@ void	*ft_llist_get(t_llist *list, int num)
 void	ft_del_llist_elem(t_llist *list, int num)
 {
 	t_lnode *node;
+	void *elem;
 
 	if (!list)
 		return ;
 	node = ft_lnode_get(num, list->elems_count, list->start.next, list->end.prev);
 	if (node)
-		list->func_del(ft_cut_lnode(node));
+	{
+		elem = ft_cut_lnode(node);
+		if (elem && list->func_del)
+			list->func_del(elem);
+		list->elems_count--;
+	}
 }
 
 int		ft_insert_llist(t_llist *list, void *elem, int num)

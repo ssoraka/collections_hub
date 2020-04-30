@@ -51,21 +51,19 @@ void	ft_del_lnode(t_lnode **node, void (*func_del)(void *))
 t_lnode *ft_lnode_get(int num, int count, t_lnode *start, t_lnode *end)
 {
 	t_lnode *node;
-	int i;
 
-	i = 0;
 	if (num < 0 || num >= count)
 		return (NULL);
 	if (num <= count >> 1)
 	{
 		node = start;
-		while (i < num)
+		while (num-- > 0)
 			node = node->next;
 	}
 	else
 	{
 		node = end;
-		while (i + num < count)
+		while (++num < count)
 			node = node->prev;
 	}
 	return (node);

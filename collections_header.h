@@ -17,6 +17,7 @@ t_lnode *ft_lnode_get(int num, int count, t_lnode *start, t_lnode *end);
 
 
 t_llist	*ft_create_llist(void (*func_del)(void *));
+void	ft_init_llist(t_llist	*llist, void (*func_del)(void *));
 void	*ft_llist_get_next(t_llist *list);
 int		ft_llist_dpush(t_llist *list, void *elem);
 int		ft_llist_push(t_llist *list, void *elem);

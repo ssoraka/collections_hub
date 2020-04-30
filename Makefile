@@ -26,7 +26,7 @@ VIS_DIR = visu-hex/
 
 LIBFT = libft.a
 LIBFT_HEADER = -I ./
-OBJ = arr_main.c arr.c llist.c lnode.c
+OBJ = list_main_test.c arr.c llist.c lnode.c
 MLX_LIB = -L /usr/local/lib/ -lmlx
 MLX_HEAD = -I /usr/local/include
 FRAMEWORK = -framework OpenGL -framework AppKit -framework OpenCL
