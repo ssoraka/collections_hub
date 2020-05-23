@@ -10,9 +10,9 @@
 #                                                                              #
 #******************************************************************************#
 
-NAME1 = a.out
-NAME2 = checker
-NAME3 = rand_int_gen
+NAME1 = list
+NAME2 = arr
+NAME3 = rbtree
 SRC1 = /Users/ssoraka/Desktop/days/Libft/libft/libft.a
 SRC2 = /Users/ssoraka/Desktop/days/Libft/libft/*.o
 
@@ -26,21 +26,24 @@ VIS_DIR = visu-hex/
 
 LIBFT = libft.a
 LIBFT_HEADER = -I ./
-OBJ = list_main_test.c arr.c llist.c lnode.c
+OBJ = arr.c llist.c lnode.c
 MLX_LIB = -L /usr/local/lib/ -lmlx
 MLX_HEAD = -I /usr/local/include
 FRAMEWORK = -framework OpenGL -framework AppKit -framework OpenCL
 
 all:
 	##gcc $(C_FLAGS) -o a.out main.c libft.a $(MLX_LIB) $(MLX_HEAD) $(FRAMEWORK)
-	gcc $(OBJ) $(LIBFT) $(LIBFT_HEADER)
+	gcc -o $(NAME3) rbtree_main_test.c $(OBJ) $(LIBFT) $(LIBFT_HEADER)
 	##gcc main.c libft.a -L /usr/local/lib/ -lmlx -I /usr/local/include -framework OpenGL  -framework AppKit
-	./$(NAME1)
+	./$(NAME3)
 	@##./$(NAME1) > command.txt
 
-test:
-	gcc -o $(NAME1) test.c solver.c libft.a
-	@/Users/ssoraka/Desktop/days/Libft/help_mat/clean
+tarr:
+	gcc -o $(NAME2) arr_main_test.c $(OBJ) $(LIBFT) $(LIBFT_HEADER)
+	./$(NAME2)
+
+tlist:
+	gcc -o $(NAME1) list_main_test.c $(OBJ) $(LIBFT) $(LIBFT_HEADER)
 	./$(NAME1)
 
 rand:

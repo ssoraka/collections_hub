@@ -3,13 +3,16 @@
 # define FT_COLLECTIONS_STRUCT_H
 #include "collections_header.h"
 
+#define RED 0
+#define BLACK 1
+
 typedef struct		s_arr
 {
 	void			*elems;
 	void			*current;
 	size_t			next;
 	size_t			elems_count;
-	size_t			elems_used;
+	int				elems_used;
 	int				elem_size;
 	void			(*func_del)(void *);
 	void			*(*value)(void *);
@@ -41,5 +44,23 @@ typedef struct		s_hmap
 	int				elems_used;
 	int				max_load;
 }					t_hmap;
+
+typedef struct		s_tnode
+{
+	void			*elem;
+	struct s_tnode	*parent;
+	struct s_tnode	*right;
+	struct s_tnode	*left;
+	int				color;
+}					t_tnode;
+
+typedef struct		s_rbtr
+{
+	struct s_tnode	*root;
+	struct s_tnode	*next;
+	int				(*func_cmp)(void *, void *);
+	void			(*func_del)(void *);
+	int				elems_count;
+}					t_rbtr;
 
 #endif

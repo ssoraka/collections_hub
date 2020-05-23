@@ -1,5 +1,4 @@
 
-#include "libft.h"
 #include "collections_header.h"
 
 
@@ -197,11 +196,11 @@ int		ft_for_each_elems(t_llist *list)
 	ft_fill_list_by_arr_in_reverse_order(list, i, 3);
 
 	answer = 0;
-	while ((ptr = ft_llist_get_next(list)))
+	while ((ptr = (int *)ft_llist_get_next(list)))
 		answer = answer * *ptr + *ptr;
 	if (answer != (1*2 + 2) * 3 + 3)
 		return (FAIL);
-	while ((ptr = ft_llist_get_next(list)))
+	while ((ptr = (int *)ft_llist_get_next(list)))
 		answer = answer * *ptr + *ptr;
 	if (answer == ((15 * 1 + 1) * 2 + 2) * 3 + 3)
 		return (SUCCESS);
@@ -312,13 +311,9 @@ int		main(int argc, char **argv)
 	ft_putstr("start\n");
 
 	ft_use_func_with_list(NULL);
-//	ft_use_func_with_list(ft_one_push_str);
-//	ft_use_func_with_list(ft_one_pop_str);
 	ft_use_func_with_list(ft_one_push_and_pop_str);
 	ft_use_func_with_list(ft_three_push_and_two_pop_str);
 	ft_use_func_with_list(ft_three_push_and_four_pop_str);
-
-//	ft_use_func_with_list(ft_one_dpush_str);
 	ft_use_func_with_list(ft_one_dpush_and_dpop_str);
 	ft_use_func_with_list(ft_for_each_elems);
 	ft_use_func_with_list(ft_for_each_elems_use_func);
@@ -328,6 +323,6 @@ int		main(int argc, char **argv)
 /*	ft_use_func_with_list();
 	ft_use_func_with_list();
 	*/
-	printf("end\n");
+	ft_putstr("end\n");
 	return (0);
 }

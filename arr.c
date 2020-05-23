@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "collections_header.h"
 
 #define ARR_REALLOC_COEF 1.5
@@ -37,7 +36,7 @@ void	ft_del_arr(t_arr **arr)
 
 	if (arr && *arr)
 	{
-		if ((*arr)->func_del)
+		if ((*arr)->func_del && (*arr)->elems_used > 0)
 		{
 			i = (*arr)->elems_used - 1;
 			while (i >= 0)
@@ -48,31 +47,40 @@ void	ft_del_arr(t_arr **arr)
 			}
 		}
 		free((*arr)->elems);
-		free(*arr);
+		ft_memdel((void **)arr);
 	}
-	*arr = NULL;
+}
+
+int		ft_init_arr(t_arr *arr, int elem_size, int elems_count, void (*func_del)(void *))
+{
+	if (!arr)
+		return (FALSE);
+	if (elems_count != 0 && elems_count < ARR_FIRST_COUNT)
+		elems_count = ARR_FIRST_COUNT;
+	arr->elems_count = elems_count;
+	arr->elems_used = 0;
+	arr->elem_size = elem_size;
+	arr->func_del = func_del;
+	arr->next = NEXT_START;
+	if ((arr->elems = ft_memalloc(elem_size * elems_count)))
+		arr->current = arr->elems - arr->elem_size;
+	else if (elems_count)
+		return (FALSE);
+	return (TRUE);
 }
 
 t_arr	*ft_create_arr(int elem_size, int elems_count, void (*func_del)(void *))
 {
 	t_arr	*arr;
 
-	if (elems_count != 0 && elems_count < ARR_FIRST_COUNT)
-		elems_count = ARR_FIRST_COUNT;
-	if (elem_size * elems_count < 0)
+	if (elem_size <= 0)
 		return (NULL);
 	arr = ft_memalloc(sizeof(t_arr));
 	if (arr)
 	{
-		arr->elems_count = elems_count;
-		arr->elems_used = 0;
-		arr->elem_size = elem_size;
-		arr->func_del = func_del;
-		arr->next = NEXT_START;
-		if (!(arr->elems = ft_memalloc(elem_size * elems_count)))
-			ft_del_arr(&arr);
-		arr->current = arr->elems - arr->elem_size;
 		arr->value = &ft_return_elem;
+		if (!ft_init_arr(arr, elem_size, elems_count, func_del))
+			ft_memdel((void **)&arr);
 	}
 	return (arr);
 }
@@ -94,14 +102,12 @@ int		ft_realloc_arr(t_arr *arr, int new_count)
 
 	if (!arr)
 		return (FALSE);
-	tmp = NULL;
-	if (new_count > arr->elems_count)
-		tmp = ft_memalloc(new_count * arr->elem_size);
-	else
+	if (new_count <= arr->elems_count)
 		return (TRUE);
-	if (!tmp)
+	if (!(tmp = ft_memalloc(new_count * arr->elem_size)))
 		return (FALSE);
-	ft_memcpy(tmp, arr->elems, arr->elems_count * arr->elem_size);
+	if (arr->elems)
+		ft_memcpy(tmp, arr->elems, arr->elems_count * arr->elem_size);
 	free(arr->elems);
 	arr->elems = tmp;
 	arr->elems_count = new_count;
@@ -129,20 +135,22 @@ void	*ft_arr_add(t_arr *arr, void *elem)
 
 void	*ft_arr_get(t_arr *arr, int num)
 {
-	if (!arr || num < 0 || arr->elems_used - 1 < num)
+	if (!arr || num < 0 || arr->elems_used < num + 1)
 		return (NULL);
 	return (arr->value(arr->elems + arr->elem_size * num));
 }
 
 void	*ft_arr_get_addr(t_arr *arr, int num)
 {
-	if (!arr || num < 0 || arr->elems_used - 1 < num)
+	if (!arr || num < 0 || arr->elems_used < num + 1)
 		return (NULL);
 	return (arr->elems + arr->elem_size * num);
 }
 
 void	*ft_arr_get_next(t_arr *arr)
 {
+	if (!arr || !arr->elems)
+		return (NULL);
 	(arr->next)++;
 	if (arr->next < arr->elems_used)
 		arr->current += arr->elem_size;
@@ -160,7 +168,7 @@ void	ft_del_elem(t_arr *arr, int num)
 	void *dst;
 	void *src;
 
-	if (!arr || arr->elems_used == 0 || num < 0 || num >= arr->elems_used)
+	if (!arr || !arr->elems_used || num < 0 || num >= arr->elems_used)
 		return ;
 	(arr->elems_used)--;
 	dst = arr->elems + arr->elem_size * num;
@@ -175,6 +183,8 @@ void	ft_del_elems_if(t_arr *arr, int (*need_del)(void *, void *), void *param)
 	int i;
 	void *elem;
 
+	if (!arr || !arr->elems || !arr->elems_used || !need_del)
+		return ;
 	i = arr->elems_used - 1;
 	elem = ft_arr_get_addr(arr, i);
 	while (i >= 0)
@@ -191,7 +201,7 @@ void	ft_for_each_elem(t_arr *arr, void (*func)(void *, void *), void *param)
 	int i;
 	void *elem;
 
-	if (!func)
+	if (!arr || !arr->elems || !func)
 		return ;
 	elem = arr->elems;
 	i = 0;
@@ -204,24 +214,28 @@ void	ft_for_each_elem(t_arr *arr, void (*func)(void *, void *), void *param)
 	}
 }
 
-void	ft_arr_init_by_value(t_arr *arr, int count, void *value)
+int		ft_arr_init_by_value(t_arr *arr, int count, void *value)
 {
 	void *ptr;
 	int i;
 
-	ptr = &(arr->elems);
+	if (!ft_realloc_arr(arr, count))
+		return (FALSE);
+	ptr = arr->elems;
 	i = 0;
-	while (i < count && i < arr->elems_count)
+	while (i < count)
 	{
 		ft_memcpy(ptr, value, arr->elem_size);
 		ptr += arr->elem_size;
 		i++;
 	}
+	return (TRUE);
 }
 
 void	ft_all_arr_init_by_value(t_arr *arr, void *value)
 {
-	ft_arr_init_by_value(arr, arr->elems_count, value);
+	if (arr->elems_count)
+		ft_arr_init_by_value(arr, arr->elems_count, value);
 }
 
 /*

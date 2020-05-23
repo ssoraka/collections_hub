@@ -34,6 +34,7 @@ void	ft_del_llist(t_llist **list);
 void	*ft_return_elem(void *elem);
 void	*ft_return_ptr(void *elem);
 void	ft_del_arr(t_arr **arr);
+int		ft_init_arr(t_arr *arr, int elem_size, int elems_count, void (*func_del)(void *));
 t_arr	*ft_create_arr(int elem_size, int elems_count, void (*func_del)(void *));
 t_arr	*ft_create_arr_of_ptr(int elems_count, void (*func_del)(void *));
 int		ft_realloc_arr(t_arr *arr, int new_count);
@@ -43,8 +44,18 @@ void	*ft_arr_get_next(t_arr *arr);
 void	ft_del_elem(t_arr *arr, int num);
 void	ft_del_elems_if(t_arr *arr, int (*need_del)(void *, void *), void *param);
 void	ft_for_each_elem(t_arr *arr, void (*func)(void *, void *), void *param);
-void	ft_arr_init_by_value(t_arr *arr, int count, void *value);
+int		ft_arr_init_by_value(t_arr *arr, int count, void *value);
 void	ft_all_arr_init_by_value(t_arr *arr, void *value);
 
+t_rbtr	*ft_create_rbtree(int (*func_cmp)(void *, void *), void (*func_del)(void *));
+void	ft_rbtree_add(t_rbtr *tree, void *value);
+void	ft_rbtree_prefix(t_rbtr *tree, void (*func)(void *, void *), void *param);
+void	ft_rbtree_postfix(t_rbtr *tree, void (*func)(void *, void *), void *param);
+void	ft_rbtree_suffix(t_rbtr *tree, void (*func)(void *, void *), void *param);
 
+t_tnode *ft_create_tnode(void *value);
+void	ft_tnode_rebalance(t_tnode *node);
+void	ft_tnode_prefix(t_tnode *node, void (*func)(void *, void *), void *param);
+void	ft_tnode_postfix(t_tnode *node, void (*func)(void *, void *), void *param);
+void	ft_tnode_suffix(t_tnode *node, void (*func)(void *, void *), void *param);
 #endif

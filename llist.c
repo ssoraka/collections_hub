@@ -1,8 +1,10 @@
 
 #include "collections_header.h"
 
-void	ft_init_llist(t_llist	*llist, void (*func_del)(void *))
+void	ft_init_llist(t_llist *llist, void (*func_del)(void *))
 {
+	if (!llist)
+		return ;
 	llist->start.next = &llist->end;
 	llist->start.prev = &llist->end;
 	llist->end.next = &llist->start;
