@@ -53,7 +53,7 @@ void	ft_tnode_left_rotate(t_tnode *node)
 		grant->right = node;
 	else
 		grant->left = node;
-	node->parent = grand;
+	node->parent = grant;
 	tmp->right = node->left;
 	if (node->left)
 		node->left->parent = tmp;
@@ -73,7 +73,7 @@ void	ft_tnode_right_rotate(t_tnode *node)
 		grant->right = node;
 	else
 		grant->left = node;
-	node->parent = grand;
+	node->parent = grant;
 	tmp->left = node->right;
 	if (node->right)
 		node->right->parent = tmp;
@@ -125,7 +125,7 @@ void	ft_tnode_rebalance(t_tnode *node)
 		return ;
 	else if (!node->parent->parent)
 		node->color = BLACK;
-	else if (node->color == RED && node->parent->color = RED)
+	else if (node->color == RED && node->parent->color == RED)
 	{
 		if (ft_is_red_color(ft_get_uncle(node)))
 			ft_case_red_dad_red_uncle(node);
@@ -161,4 +161,20 @@ void	ft_tnode_prefix(t_tnode *node, void (*func)(void *, void *), void *param)
 		ft_tnode_prefix(node->left, func, param);
 	if (node->right)
 		ft_tnode_prefix(node->right, func, param);
+}
+
+void	ft_tnode_del(t_tnode *node, void (*func)(void *))
+{
+	if (node && node->elem)
+		func(node->elem);
+	free(node);
+}
+
+void	ft_tnode_del_all(t_tnode *node, void (*func)(void *))
+{
+	if (node->left)
+		ft_tnode_del_all(node->left, func);
+	if (node->right)
+		ft_tnode_del_all(node->right, func);
+	ft_tnode_del(node, func);
 }

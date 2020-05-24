@@ -1,10 +1,10 @@
 
 #ifndef FT_COLLECTIONS_STRUCT_H
 # define FT_COLLECTIONS_STRUCT_H
-#include "collections_header.h"
+# include "collections_header.h"
 
-#define RED 0
-#define BLACK 1
+# define RED 0
+# define BLACK 1
 
 typedef struct		s_arr
 {
@@ -58,7 +58,7 @@ typedef struct		s_rbtr
 {
 	struct s_tnode	root;
 	struct s_tnode	*next;
-	int				(*func_cmp)(void *, void *);
+	int				(*is_place_right)(void *, void *);
 	void			(*func_del)(void *);
 	int				elems_count;
 }					t_rbtr;
