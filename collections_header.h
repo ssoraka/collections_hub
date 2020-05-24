@@ -54,8 +54,10 @@ void	ft_rbtree_postfix(t_rbtr *tree, void (*func)(void *, void *), void *param);
 void	ft_rbtree_suffix(t_rbtr *tree, void (*func)(void *, void *), void *param);
 
 t_tnode *ft_create_tnode(void *value);
+void	ft_init_rbtree(t_rbtr *tree, int (*func_cmp)(void *, void *), void (*func_del)(void *));
+void	ft_rbtree_insert(t_rbtr *tree, t_tnode *node);
 void	ft_tnode_rebalance(t_tnode *node);
 void	ft_tnode_prefix(t_tnode *node, void (*func)(void *, void *), void *param);
 void	ft_tnode_postfix(t_tnode *node, void (*func)(void *, void *), void *param);
-void	ft_tnode_suffix(t_tnode *node, void (*func)(void *, void *), void *param);
+void	ft_tnode_infix(t_tnode *node, void (*func)(void *, void *), void *param);
 #endif

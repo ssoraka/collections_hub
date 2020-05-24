@@ -56,7 +56,7 @@ typedef struct		s_tnode
 
 typedef struct		s_rbtr
 {
-	struct s_tnode	*root;
+	struct s_tnode	root;
 	struct s_tnode	*next;
 	int				(*func_cmp)(void *, void *);
 	void			(*func_del)(void *);
