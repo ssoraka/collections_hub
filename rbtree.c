@@ -23,7 +23,7 @@ t_rbtr	*ft_create_rbtree(t_bool (*is_place_right)(t_old_elem *, t_new_elem *), v
 
 void	ft_del_rbtree(t_rbtr **tree)
 {
-	if ((*tree)->func_del)
+	if ((*tree)->root.left)
 		ft_tnode_del_all((*tree)->root.left, (*tree)->func_del);
 	ft_memdel((void **)tree);
 }
@@ -35,8 +35,8 @@ void	ft_rbtree_insert(t_rbtr *tree, t_tnode *node)
 
 	if (!tree || !node)
 		return ;
-	tmp = NULL;
-	current = &tree->root.left;
+	tmp = &tree->root;
+	current = &tmp->left;
 	while (*current)
 	{
 		tmp = *current;
@@ -47,18 +47,48 @@ void	ft_rbtree_insert(t_rbtr *tree, t_tnode *node)
 	}
 	*current = node;
 	node->parent = tmp;
+	(tree->elems_count)++;
 }
 
-void	ft_rbtree_add(t_rbtr *tree, void *value)
+t_bool	ft_rbtree_add(t_rbtr *tree, void *value)
 {
 	t_tnode *node;
 
 	if (!tree || !value)
-		return ;
+		return (FALSE);
 	if (!(node = ft_create_tnode(value)))
-		return ;
+		return (FALSE);
 	ft_rbtree_insert(tree, node);
 	ft_tnode_rebalance(node);
+	return (TRUE);
+}
+
+void	*ft_rbtree_get_next(t_rbtr *tree)
+{
+	if (!tree)
+		return (NULL);
+	if (!tree->next)
+		tree->next = ft_find_left_value(tree->root.left);
+	else if (tree->next->right)
+	{
+		tree->next = tree->next->right;
+		tree->next = ft_find_left_value(tree->next);
+	}
+	else if (tree->next->parent != &tree->root
+	&& tree->next == tree->next->parent->left)
+		tree->next = tree->next->parent;
+	else if (tree->next = tree->next->parent->right)
+	{
+		while (tree->next != tree->next->parent->left)
+			tree->next = tree->next->parent;
+		if (tree->next->parent == &tree->root)
+			tree->next = NULL;
+		else
+			tree->next = tree->next->parent;
+	}
+	if (tree->next)
+		return (tree->next->elem);
+	return (NULL);
 }
 
 void	ft_rbtree_prefix(t_rbtr *tree, void (*func)(void *, void *), void *param)

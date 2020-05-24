@@ -136,6 +136,13 @@ void	ft_tnode_rebalance(t_tnode *node)
 	}
 }
 
+t_tnode	*ft_find_left_value(t_tnode *node)
+{
+	while (node->left)
+		node = node->left;
+	return (node);
+}
+
 void	ft_tnode_infix(t_tnode *node, void (*func)(void *, void *), void *param)
 {
 	if (node->left)
@@ -165,7 +172,7 @@ void	ft_tnode_prefix(t_tnode *node, void (*func)(void *, void *), void *param)
 
 void	ft_tnode_del(t_tnode *node, void (*func)(void *))
 {
-	if (node && node->elem)
+	if (func && node->elem)
 		func(node->elem);
 	free(node);
 }
