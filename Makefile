@@ -13,6 +13,7 @@
 NAME1 = list
 NAME2 = arr
 NAME3 = rbtree
+NAME4 = hmap
 SRC1 = /Users/ssoraka/Desktop/days/Libft/libft/libft.a
 SRC2 = /Users/ssoraka/Desktop/days/Libft/libft/*.o
 
@@ -33,10 +34,14 @@ FRAMEWORK = -framework OpenGL -framework AppKit -framework OpenCL
 
 all:
 	##gcc $(C_FLAGS) -o a.out main.c libft.a $(MLX_LIB) $(MLX_HEAD) $(FRAMEWORK)
-	gcc -o $(NAME3) rbtree_main_test.c $(OBJ) $(LIBFT) $(LIBFT_HEADER)
+	gcc -o $(NAME4) hmap_main_test.c $(OBJ) $(LIBFT) $(LIBFT_HEADER)
 	##gcc main.c libft.a -L /usr/local/lib/ -lmlx -I /usr/local/include -framework OpenGL  -framework AppKit
-	./$(NAME3)
+	./$(NAME4)
 	@##./$(NAME1) > command.txt
+
+ttree:
+	gcc -o $(NAME3) rbtree_main_test.c $(OBJ) $(LIBFT) $(LIBFT_HEADER)
+	./$(NAME3)
 
 tarr:
 	gcc -o $(NAME2) arr_main_test.c $(OBJ) $(LIBFT) $(LIBFT_HEADER)

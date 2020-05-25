@@ -8,6 +8,8 @@
 
 typedef void t_new_elem;
 typedef void t_old_elem;
+typedef void t_new_key;
+typedef void t_old_key;
 typedef int t_bool;
 
 #include "libft.h"
@@ -52,23 +54,22 @@ void	ft_for_each_elem(t_arr *arr, void (*func)(void *, void *), void *param);
 int		ft_arr_init_by_value(t_arr *arr, int count, void *value);
 void	ft_all_arr_init_by_value(t_arr *arr, void *value);
 
-t_rbtr	*ft_create_rbtree(t_bool (*is_place_right)(t_old_elem *, t_new_elem *), void (*func_del)(void *));
-void	ft_init_rbtree(t_rbtr *tree, t_bool (*is_place_right)(t_old_elem *, t_new_elem *), void (*func_del)(void *));
+t_rbtr	*ft_create_rbtree(int (*func_cmp)(t_old_key *, t_new_key *), void (*func_del)(t_old_key *, t_old_elem *));
+void	ft_init_rbtree(t_rbtr *tree, int (*func_cmp)(t_old_key *, t_new_key *), void (*func_del)(t_old_key *, t_old_elem *));
 void	ft_del_rbtree(t_rbtr **tree);
 void	ft_rbtree_insert(t_rbtr *tree, t_tnode *node);
-t_bool	ft_rbtree_add(t_rbtr *tree, void *value);
+t_bool	ft_rbtree_add(t_rbtr *tree, void *key, void *value);
 void	*ft_rbtree_get_next(t_rbtr *tree);
 void	ft_rbtree_prefix(t_rbtr *tree, void (*func)(t_old_elem *, void *), void *param);
 void	ft_rbtree_postfix(t_rbtr *tree, void (*func)(t_old_elem *, void *), void *param);
 void	ft_rbtree_suffix(t_rbtr *tree, void (*func)(t_old_elem *, void *), void *param);
 
-t_tnode *ft_create_tnode(void *value);
-void	ft_init_rbtree(t_rbtr *tree, int (*is_place_right)(t_old_elem *, t_new_elem *), void (*func_del)(void *));
+t_tnode *ft_create_tnode(void *key, void *value);
 t_tnode	*ft_find_left_value(t_tnode *node);
 void	ft_tnode_rebalance(t_tnode *node);
 void	ft_tnode_prefix(t_tnode *node, void (*func)(void *, void *), void *param);
 void	ft_tnode_postfix(t_tnode *node, void (*func)(void *, void *), void *param);
 void	ft_tnode_infix(t_tnode *node, void (*func)(void *, void *), void *param);
-void	ft_tnode_del(t_tnode *node, void (*func)(void *));
-void	ft_tnode_del_all(t_tnode *node, void (*func)(void *));
+void	ft_tnode_del(t_tnode *node, void (*func)(void *, void *));
+void	ft_tnode_del_all(t_tnode *node, void (*func)(void *, void *));
 #endif

@@ -1,7 +1,7 @@
 
 #include "collections_header.h"
 
-t_tnode *ft_create_tnode(void *key, void *value)
+t_tnode *ft_create_tnode(void *value)
 {
 	t_tnode *node;
 
@@ -9,7 +9,6 @@ t_tnode *ft_create_tnode(void *key, void *value)
 	if (node)
 	{
 		node->elem = value;
-		node->key = key;
 		node->color = RED;
 	}
 	return (node);
@@ -171,14 +170,14 @@ void	ft_tnode_prefix(t_tnode *node, void (*func)(void *, void *), void *param)
 		ft_tnode_prefix(node->right, func, param);
 }
 
-void	ft_tnode_del(t_tnode *node, void (*func)(void *, void *))
+void	ft_tnode_del(t_tnode *node, void (*func)(void *))
 {
 	if (func && node->elem)
-		func(node->key, node->elem);
+		func(node->elem);
 	free(node);
 }
 
-void	ft_tnode_del_all(t_tnode *node, void (*func)(void *, void *))
+void	ft_tnode_del_all(t_tnode *node, void (*func)(void *))
 {
 	if (node->left)
 		ft_tnode_del_all(node->left, func);

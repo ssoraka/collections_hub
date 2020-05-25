@@ -1,23 +1,23 @@
 
 #include "collections_header.h"
 
-void	ft_init_rbtree(t_rbtr *tree, int (*func_cmp)(t_old_key *, t_new_key *), void (*func_del)(t_old_key *, t_old_elem *))
+void	ft_init_rbtree(t_rbtr *tree, t_bool (*is_place_right)(t_old_elem *, t_new_elem *), void (*func_del)(void *))
 {
 	if (tree)
 	{
-		tree->func_cmp = func_cmp;
+		tree->is_place_right = is_place_right;
 		tree->func_del = func_del;
 	}
 }
 
-t_rbtr	*ft_create_rbtree(int (*func_cmp)(t_old_key *, t_new_key *), void (*func_del)(t_old_key *, t_old_elem *))
+t_rbtr	*ft_create_rbtree(t_bool (*is_place_right)(t_old_elem *, t_new_elem *), void (*func_del)(void *))
 {
 	t_rbtr	*tree;
 
-	if (!func_cmp)
+	if (!is_place_right)
 		return (NULL);
 	tree = ft_memalloc(sizeof(t_rbtr));
-	ft_init_rbtree(tree, func_cmp, func_del);
+	ft_init_rbtree(tree, is_place_right, func_del);
 	return (tree);
 }
 
@@ -40,7 +40,7 @@ void	ft_rbtree_insert(t_rbtr *tree, t_tnode *node)
 	while (*current)
 	{
 		tmp = *current;
-		if (tree->func_cmp(tmp->key, node->key) >= 0)
+		if (tree->is_place_right(tmp->elem, node->elem) == TRUE)
 			current = &tmp->right;
 		else
 			current = &tmp->left;
@@ -49,44 +49,18 @@ void	ft_rbtree_insert(t_rbtr *tree, t_tnode *node)
 	node->parent = tmp;
 	(tree->elems_count)++;
 }
- /*
- нужно получить хэш из ключа, поместить его в ноду
- для предотвращения повторных вычислений,
- вроде хеш нужен только для определения ячейки к хеш мапе
- и вроде он нафиг больше не нужен
- */
-t_bool	ft_rbtree_add(t_rbtr *tree, void *key, void *value)
+
+t_bool	ft_rbtree_add(t_rbtr *tree, void *value)
 {
 	t_tnode *node;
 
 	if (!tree || !value)
 		return (FALSE);
-	if (!(node = ft_create_tnode(key, value)))
+	if (!(node = ft_create_tnode(value)))
 		return (FALSE);
 	ft_rbtree_insert(tree, node);
 	ft_tnode_rebalance(node);
 	return (TRUE);
-}
-
-void	*ft_rbtree_get_elem(t_rbtr *tree, void *key)
-{
-	t_tnode	*node;
-	int		cmp;
-
-	if (!tree || !key)
-		return (NULL);
-	node = tree->root.left;
-	while (node)
-	{
-		cmp = tree->func_cmp(node->key, key);
-		if (!cmp)
-			return (node->elem);
-		else if (cmp > 0)
-			node = node->right;
-		else
-			node = node->left;
-	}
-	return (NULL);
 }
 
 void	*ft_rbtree_get_next(t_rbtr *tree)

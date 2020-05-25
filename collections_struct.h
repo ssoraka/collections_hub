@@ -48,6 +48,7 @@ typedef struct		s_hmap
 typedef struct		s_tnode
 {
 	void			*elem;
+	void			*key;
 	struct s_tnode	*parent;
 	struct s_tnode	*right;
 	struct s_tnode	*left;
@@ -58,8 +59,8 @@ typedef struct		s_rbtr
 {
 	struct s_tnode	root;
 	struct s_tnode	*next;
-	int				(*is_place_right)(void *, void *);
-	void			(*func_del)(void *);
+	int				(*func_cmp)(t_old_key *, t_new_key *);
+	void			(*func_del)(t_old_key *, t_old_elem *);
 	int				elems_count;
 }					t_rbtr;
 
