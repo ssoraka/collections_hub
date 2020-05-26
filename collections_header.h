@@ -72,4 +72,12 @@ void	ft_tnode_postfix(t_tnode *node, void (*func)(void *, void *), void *param);
 void	ft_tnode_infix(t_tnode *node, void (*func)(void *, void *), void *param);
 void	ft_tnode_del(t_tnode *node, void (*func)(void *, void *));
 void	ft_tnode_del_all(t_tnode *node, void (*func)(void *, void *));
+
+void	ft_ilist_set_add(t_ilist *ilist, int (*add)(void *, void *, void *));
+void	ft_ilist_set_get(t_ilist *ilist, void *(*find)(void *, void *));
+void	ft_ilist_set_del(t_ilist *ilist, void (*del)(void *));
+void	ft_ilist_set_list(t_ilist *ilist, void *list, int elem_size);
+
+t_hmap	*ft_create_hashmap(int (*func_hash)(void *), t_ilist *list);
+void	ft_del_hmap(t_hmap **hmap);
 #endif
