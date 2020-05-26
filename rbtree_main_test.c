@@ -12,17 +12,19 @@ void	ft_print(int i, int status)
 		ft_putstr(" FAIL\n");
 }
 
-t_bool	func_cmp(void *old, void *new)
+int		func_cmp(void *old, void *new)
 {
 	int *o;
 	int *n;
 
 	o = (int *)old;
 	n = (int *)new;
-	if (*n >= *o)
-		return (TRUE);
+	if (*n > *o)
+		return (1);
+	else if (*n == *o)
+		return (0);
 	else
-		return (FALSE);
+		return (-1);
 }
 
 void	ft_use_func_with_tree(int (*func)(t_rbtr *))
@@ -47,7 +49,7 @@ int		ft_add_one_elem(t_rbtr *tree)
 	int value;
 
 	value = 4;
-	ft_rbtree_add(tree, (void *)&value);
+	ft_rbtree_add(tree, (void *)&value, (void *)&value);
 	if (tree->root.left->elem == (void *)&value
 	&& tree->root.left->color == BLACK
 	&& tree->elems_count == 1)
@@ -61,8 +63,8 @@ int		ft_add_two_elem(t_rbtr *tree)
 
 	v[0] = 4;
 	v[1] = 5;
-	ft_rbtree_add(tree, (void *)v);
-	ft_rbtree_add(tree, (void *)(v + 1));
+	ft_rbtree_add(tree, (void *)v, (void *)v);
+	ft_rbtree_add(tree, (void *)(v + 1), (void *)(v + 1));
 	if (tree->root.left->elem == (void *)v
 	&& tree->root.left->right->elem == (void *)(v + 1)
 	&& tree->root.left->color == BLACK
@@ -79,9 +81,9 @@ int		ft_add_three_elem_left_rot(t_rbtr *tree)
 	v[0] = 4;
 	v[1] = 5;
 	v[2] = 6;
-	ft_rbtree_add(tree, (void *)v);
-	ft_rbtree_add(tree, (void *)(v + 1));
-	ft_rbtree_add(tree, (void *)(v + 2));
+	ft_rbtree_add(tree, (void *)v, (void *)v);
+	ft_rbtree_add(tree, (void *)(v + 1), (void *)(v + 1));
+	ft_rbtree_add(tree, (void *)(v + 2), (void *)(v + 2));
 	if (tree->root.left->elem == (void *)(v + 1)
 	&& tree->root.left->color == BLACK
 	&& tree->root.left->right->elem == (void *)(v + 2)
@@ -100,9 +102,9 @@ int		ft_add_three_elem_right_rot(t_rbtr *tree)
 	v[0] = 4;
 	v[1] = 5;
 	v[2] = 4;
-	ft_rbtree_add(tree, (void *)v);
-	ft_rbtree_add(tree, (void *)(v + 1));
-	ft_rbtree_add(tree, (void *)(v + 2));
+	ft_rbtree_add(tree, (void *)v, (void *)v);
+	ft_rbtree_add(tree, (void *)(v + 1), (void *)(v + 1));
+	ft_rbtree_add(tree, (void *)(v + 2), (void *)(v + 2));
 	if (tree->root.left->elem == (void *)(v + 2)
 	&& tree->root.left->color == BLACK
 	&& tree->root.left->right->elem == (void *)(v + 1)
@@ -131,7 +133,7 @@ int		ft_add_eight_elem(t_rbtr *tree)
 	while (++i < 8)
 	{
 		v[i] = i;
-		ft_rbtree_add(tree, (void *)(v + i));
+		ft_rbtree_add(tree, (void *)(v + i), (void *)(v + i));
 	}
 	root = tree->root.left;
 	if (ft_assert_true(root, (void *)(v + 3), BLACK)
@@ -157,7 +159,7 @@ int		ft_iterator(t_rbtr *tree)
 	while (++i < 8)
 	{
 		v[i] = i;
-		ft_rbtree_add(tree, (void *)(v + i));
+		ft_rbtree_add(tree, (void *)(v + i), (void *)(v + i));
 	}
 	i = -1;
 	while ((ptr = (int *)ft_rbtree_get_next(tree)))
