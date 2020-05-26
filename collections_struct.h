@@ -35,9 +35,18 @@ typedef struct		s_llist
 	void			(*func_del)(void *);
 }					t_llist;
 
+typedef struct		s_ilist
+{
+	int				(*add)(void *, void *, void *);
+	void			*(*find)(void *, void *);
+	void			(*del)(void *);
+	char			mem[64];
+	int				size;
+}					t_ilist;
+
 typedef struct		s_hmap
 {
-	struct s_llist	list;
+	struct s_ilist	list;
 	struct s_arr	*arr;
 	int				(*func_hash)(void *);
 	int				elems_count;

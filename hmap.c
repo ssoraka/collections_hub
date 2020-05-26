@@ -11,26 +11,15 @@ t_arr *ft_create_arr_of_elems(void *value, int elem_size, int elems_count, void 
 	if (!arr)
 		return (NULL);
 	ft_all_arr_init_by_value(arr, value);
+	arr->elems_used = arr->elems_count;
 	return (arr);
 }
 
-int		ft_arr_hash_add(t_arr *arr, void *value, int hash)
-{
-	t_llist *list;
-	int index;
-
-	index = hash & (arr->elems_used ^ 1);
-	list = ft_arr_get(arr, index);
-	//add hash field in node if llist
-	if (!ft_llist_hash_add(list, value, hash))
-		return (FALSE);
-	return (TRUE);
-}
 
 int		ft_increase_hmap(t_hmap *hmap)
 {
 	t_arr *arr;
-	llist *list;
+/*	t_list *list;
 	t_node	*elem;
 
 	arr = ft_create_arr_of_elems((void *)&hmap->list, sizeof(t_llist), hmap->arr.elems_used << 1, hmap->arr.func_del);
@@ -45,51 +34,55 @@ int		ft_increase_hmap(t_hmap *hmap)
 			}
 	ft_del_arr(&(hmap->arr));
 	hmap->arr = arr;
-	hmap->max_load = arr->elems_used * HASHMAP_LOAD;
+	hmap->max_load = arr->elems_used * HASHMAP_LOAD;*/
 	return (TRUE);
 }
 
 
 
-
-
-int		ft_hashmap_put(t_hmap *hmap, void *value, void *key)
+int		ft_hashmap_put(t_hmap *hmap, void *key, void *value)
 {
-	t_llist *list;
 	int index;
-	int hash;
+	void *list;
 
 	if (hmap->elems_used > hmap->max_load)
 		if (!ft_increase_hmap(hmap))
 			return (FALSE);
-	hash = hmap->func_hash(key);
-	ft_arr_hash_add(hmap->arr, value, hash);
-	if (list->elems_count == 1)
-		hmap->elems_used++;
+	index = hmap->func_hash(key) & (hmap->arr->elem_size - 1);
+	list = ft_arr_get(hmap->arr, index);
+	if (!(hmap->list.add(list, key, value)))
+		return (FALSE);
+	hmap->elems_used++;
 	return (TRUE);
+}
+
+void	*ft_hashmap_get(t_hmap *hmap, void *key)
+{
+	int index;
+	void *list;
+
+	index = hmap->func_hash(key) & (hmap->arr->elem_size - 1);
+	list = ft_arr_get(hmap->arr, index);
+	return (hmap->list.find(list, key));
 }
 
 void	ft_del_hmap(t_hmap **hmap)
 {
-	t_llist *list;
-
-	while ((list = ft_arr_get_next((*hmap)->arr)))
-		
 	ft_del_arr(&((*hmap)->arr));
 	ft_memdel((void **)hmap);
 }
 
-t_hmap	*ft_create_hashmap(int (*func_hash)(void *))
+t_hmap	*ft_create_hashmap(int (*func_hash)(void *), t_ilist *list)
 {
 	t_hmap	*hmap;
 
-	if (!func_hash)
+	if (!func_hash || !list)
 		return (NULL);
 	if (!(hmap = ft_memalloc(sizeof(t_hmap))))
 		return (NULL);
-	ft_llist_init(&(hmap->list), NULL);
+	ft_memcpy((void *)&hmap->list, (void *)list, sizeof(t_ilist));
 	hmap->max_load = HASHMAP_FIRST_COUNT * HASHMAP_LOAD;
-	hmap->arr = ft_create_arr_of_elems((void *)&hmap->list, sizeof(t_llist), HASHMAP_FIRST_COUNT, NULL);
+	hmap->arr = ft_create_arr_of_elems((void *)hmap->list.mem, hmap->list.size, HASHMAP_FIRST_COUNT, hmap->list.del);
 	if (!hmap->arr)
 		ft_memdel((void **)&hmap);
 	return (hmap);
