@@ -9,7 +9,7 @@
 typedef struct		s_arr
 {
 	void			*elems;
-	void			*current;
+	char			*current;
 	size_t			next;
 	size_t			elems_count;
 	int				elems_used;

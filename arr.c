@@ -63,7 +63,7 @@ int		ft_init_arr(t_arr *arr, int elem_size, int elems_count, void (*func_del)(vo
 	arr->func_del = func_del;
 	arr->next = NEXT_START;
 	if ((arr->elems = ft_memalloc(elem_size * elems_count)))
-		arr->current = arr->elems - arr->elem_size;
+		arr->current = (char *)arr->elems - arr->elem_size;
 	else if (elems_count)
 		return (FALSE);
 	return (TRUE);
@@ -111,7 +111,7 @@ int		ft_realloc_arr(t_arr *arr, int new_count)
 	free(arr->elems);
 	arr->elems = tmp;
 	arr->elems_count = new_count;
-	arr->current = arr->elems - arr->elem_size;
+	arr->current = (char *)arr->elems - arr->elem_size;
 	return (TRUE);
 }
 
@@ -157,10 +157,10 @@ void	*ft_arr_get_next(t_arr *arr)
 	else
 	{
 		arr->next = NEXT_START;
-		arr->current = arr->elems - arr->elem_size;
+		arr->current = (char *)arr->elems - arr->elem_size;
 		return (NULL);
 	}
-	return (arr->value(arr->current));
+	return (arr->value((void *)arr->current));
 }
 
 void	ft_del_elem(t_arr *arr, int num)
