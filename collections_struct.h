@@ -40,7 +40,7 @@ typedef struct		s_ilist
 	int				(*add)(void *, void *, void *);
 	void			*(*find)(void *, void *);
 	void			(*del)(void *);
-	char			mem[64];
+	char			mem[128];
 	int				size;
 }					t_ilist;
 

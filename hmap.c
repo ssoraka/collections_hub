@@ -45,9 +45,9 @@ int		ft_hashmap_put(t_hmap *hmap, void *key, void *value)
 	int index;
 	void *list;
 
-	if (hmap->elems_used > hmap->max_load)
-		if (!ft_increase_hmap(hmap))
-			return (FALSE);
+//	if (hmap->elems_used > hmap->max_load)
+//		if (!ft_increase_hmap(hmap))
+//			return (FALSE);
 	index = hmap->func_hash(key) & (hmap->arr->elem_size - 1);
 	list = ft_arr_get(hmap->arr, index);
 	if (!(hmap->list.add(list, key, value)))
@@ -80,6 +80,7 @@ t_hmap	*ft_create_hashmap(int (*func_hash)(void *), t_ilist *list)
 		return (NULL);
 	if (!(hmap = ft_memalloc(sizeof(t_hmap))))
 		return (NULL);
+	hmap->func_hash = func_hash;
 	ft_memcpy((void *)&hmap->list, (void *)list, sizeof(t_ilist));
 	hmap->max_load = HASHMAP_FIRST_COUNT * HASHMAP_LOAD;
 	hmap->arr = ft_create_arr_of_elems((void *)hmap->list.mem, hmap->list.size, HASHMAP_FIRST_COUNT, hmap->list.del);

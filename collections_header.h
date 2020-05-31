@@ -57,9 +57,11 @@ void	ft_all_arr_init_by_value(t_arr *arr, void *value);
 t_rbtr	*ft_create_rbtree(int (*func_cmp)(t_old_key *, t_new_key *), void (*func_del)(t_old_key *, t_old_elem *));
 void	ft_init_rbtree(t_rbtr *tree, int (*func_cmp)(t_old_key *, t_new_key *), void (*func_del)(t_old_key *, t_old_elem *));
 void	ft_del_rbtree(t_rbtr **tree);
+void	ft_del_rbtree_nodes(t_rbtr *tree);
 void	ft_rbtree_insert(t_rbtr *tree, t_tnode *node);
 t_bool	ft_rbtree_add(t_rbtr *tree, void *key, void *value);
 void	*ft_rbtree_get_next(t_rbtr *tree);
+void	*ft_rbtree_get_elem(t_rbtr *tree, void *key);
 void	ft_rbtree_prefix(t_rbtr *tree, void (*func)(t_old_elem *, void *), void *param);
 void	ft_rbtree_postfix(t_rbtr *tree, void (*func)(t_old_elem *, void *), void *param);
 void	ft_rbtree_suffix(t_rbtr *tree, void (*func)(t_old_elem *, void *), void *param);
@@ -79,5 +81,7 @@ void	ft_ilist_set_del(t_ilist *ilist, void (*del)(void *));
 void	ft_ilist_set_list(t_ilist *ilist, void *list, int elem_size);
 
 t_hmap	*ft_create_hashmap(int (*func_hash)(void *), t_ilist *list);
+int		ft_hashmap_put(t_hmap *hmap, void *key, void *value);
+void	*ft_hashmap_get(t_hmap *hmap, void *key);
 void	ft_del_hmap(t_hmap **hmap);
 #endif

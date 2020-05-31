@@ -21,10 +21,15 @@ t_rbtr	*ft_create_rbtree(int (*func_cmp)(t_old_key *, t_new_key *), void (*func_
 	return (tree);
 }
 
+void	ft_del_rbtree_nodes(t_rbtr *tree)
+{
+	if (tree->root.left)
+		ft_tnode_del_all(tree->root.left, tree->func_del);
+}
+
 void	ft_del_rbtree(t_rbtr **tree)
 {
-	if ((*tree)->root.left)
-		ft_tnode_del_all((*tree)->root.left, (*tree)->func_del);
+	ft_del_rbtree_nodes(*tree);
 	ft_memdel((void **)tree);
 }
 
