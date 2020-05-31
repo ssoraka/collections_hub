@@ -6,6 +6,7 @@
 # define RED 0
 # define BLACK 1
 
+# define MAX_LIST_SIZE 128
 typedef struct		s_arr
 {
 	void			*elems;
@@ -37,10 +38,13 @@ typedef struct		s_llist
 
 typedef struct		s_ilist
 {
+	char			mem[MAX_LIST_SIZE];
 	int				(*add)(void *, void *, void *);
 	void			*(*find)(void *, void *);
 	void			(*del)(void *);
-	char			mem[128];
+	int				(*get_next)(void *, void **, void **);
+	void			(*del_list_without_key_value)(void *);
+	int				shift_del_elems;
 	int				size;
 }					t_ilist;
 

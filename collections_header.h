@@ -79,6 +79,10 @@ void	ft_ilist_set_add(t_ilist *ilist, int (*add)(void *, void *, void *));
 void	ft_ilist_set_get(t_ilist *ilist, void *(*find)(void *, void *));
 void	ft_ilist_set_del(t_ilist *ilist, void (*del)(void *));
 void	ft_ilist_set_list(t_ilist *ilist, void *list, int elem_size);
+void	ft_ilist_set_func_del_elem(t_ilist *list, void **ptr_on_del_elems);
+void	ft_ilist_set_get_next(t_ilist *list, int (*get_next)(void *, void **, void **));
+void	ft_ilist_set_clear_func_del_elem(t_ilist *list, void *mem);
+void	ft_ilist_set_func_for_resize_map(t_ilist *list, void (*del_list_without_key_value)(void *));
 
 t_hmap	*ft_create_hashmap(int (*func_hash)(void *), t_ilist *list);
 int		ft_hashmap_put(t_hmap *hmap, void *key, void *value);

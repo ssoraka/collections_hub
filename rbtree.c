@@ -96,7 +96,7 @@ void	*ft_rbtree_get_elem(t_rbtr *tree, void *key)
 
 void	*ft_rbtree_get_next(t_rbtr *tree)
 {
-	if (!tree)
+	if (!tree || !tree->elems_count)
 		return (NULL);
 	if (!tree->next)
 		tree->next = ft_find_left_value(tree->root.left);

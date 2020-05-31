@@ -29,6 +29,23 @@ void del(void *list)
 	ft_del_rbtree_nodes((t_rbtr *)list);
 }
 
+int get_next(void *list, void **key, void **value)
+{
+	t_rbtr *tree;
+
+	tree = (t_rbtr *)list;
+	if (!ft_rbtree_get_next(tree))
+		return (FALSE);
+	*key = tree->next->key;
+	*value = tree->next->elem;
+	return (TRUE);
+}
+
+void	del_list_without_key_value(void *list)
+{
+	((t_rbtr *)list)->func_del = NULL;
+}
+
 int func_hash(void *key)
 {
 	return (((char *)key)[0] - '0');
@@ -46,7 +63,11 @@ t_hmap	*ft_create_hmap()
 	ft_ilist_set_add(&list, add);
 	ft_ilist_set_get(&list, find);
 	ft_ilist_set_del(&list, del);
+	ft_ilist_set_get_next(&list, get_next);
+	ft_ilist_set_func_del_elem(&list, (void **)&tree->func_del);
 	ft_ilist_set_list(&list, (void *)tree, sizeof(t_rbtr));
+	ft_ilist_set_func_for_resize_map(&list, del_list_without_key_value);
+
 	hmap = ft_create_hashmap(func_hash, &list);
 	return(hmap);
 }
@@ -126,6 +147,37 @@ int		ft_add_two_str_with_one_hash(t_hmap *hmap)
 		return (FAIL);
 }
 
+void ft_putnbr_end1(int n)
+{
+	ft_putnbr(n);
+	ft_putstr("\n");
+}
+
+
+int		ft_increase_hashmap(t_hmap *hmap)
+{
+	char *str;
+	int i;
+
+
+	i = 0;
+	while (i < hmap->max_load)
+	{
+		str = ft_itoa(i);
+		ft_hashmap_put(hmap, (void *)str, (void *)str);
+		i++;
+	}
+	str = ft_itoa(i);
+	if (!ft_hashmap_put(hmap, (void *)str, (void *)str))
+		return (FAIL);
+	if (hmap->max_load == HASHMAP_LOAD * (HASHMAP_FIRST_COUNT * 2)
+	&& hmap->elems_used == i + 1
+	&& hmap->arr->elems_count == HASHMAP_FIRST_COUNT * 2)
+		return (SUCCESS);
+	return (FAIL);
+}
+
+
 int		main(int argc, char **argv)
 {
 	ft_putstr("start\n");
@@ -133,6 +185,7 @@ int		main(int argc, char **argv)
 	ft_use_func_with_tree(ft_add_one_str);
 	ft_use_func_with_tree(ft_add_two_str);
 	ft_use_func_with_tree(ft_add_two_str_with_one_hash);
+	ft_use_func_with_tree(ft_increase_hashmap);
 
 
 

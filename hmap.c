@@ -16,25 +16,38 @@ t_arr *ft_create_arr_of_elems(void *value, int elem_size, int elems_count, void 
 }
 
 
+void	ft_del_arr_without_del_content(t_arr *arr, t_ilist *ilist)
+{
+	void *elem;
+
+	while ((elem = ft_arr_get_next(arr)))
+		ilist->del_list_without_key_value(elem);
+	ft_del_arr(&arr);
+}
+
 int		ft_increase_hmap(t_hmap *hmap)
 {
-	t_arr *arr;
-/*	t_list *list;
-	t_node	*elem;
+	t_hmap	tmp;
+	void	*list;
+	void	*value;
+	void	*key;
 
-	arr = ft_create_arr_of_elems((void *)&hmap->list, sizeof(t_llist), hmap->arr.elems_used << 1, hmap->arr.func_del);
-	if (!arr)
+	ft_memcpy((void *)&tmp, hmap, sizeof(t_hmap));
+	tmp.elems_used = 0;
+	tmp.max_load = tmp.arr->elems_used * 2 * HASHMAP_LOAD;
+	tmp.arr = ft_create_arr_of_elems((void *)tmp.list.mem, hmap->list.size, hmap->arr->elems_used << 1, hmap->list.del);
+	if (!tmp.arr)
 		return (FALSE);
-	while ((list = ft_arr_get_next(hmap->arr))
-		while ((elem = ft_llist_get_next_node(llist)))
-			if (!ft_arr_hash_add(hmap->arr, elem->value, elem->hash))
+	while ((list = ft_arr_get_next(hmap->arr)))
+		while (hmap->list.get_next(list, &key, &value))
+			if (!ft_hashmap_put(&tmp, key, value))
 			{
-				ft_del_arr(&arr);
+				ft_del_arr_without_del_content(tmp.arr, &tmp.list);
 				return (FALSE);
 			}
-	ft_del_arr(&(hmap->arr));
-	hmap->arr = arr;
-	hmap->max_load = arr->elems_used * HASHMAP_LOAD;*/
+	ft_del_arr_without_del_content(hmap->arr, &hmap->list);
+	hmap->arr = tmp.arr;
+	hmap->max_load = tmp.max_load;
 	return (TRUE);
 }
 
@@ -45,10 +58,10 @@ int		ft_hashmap_put(t_hmap *hmap, void *key, void *value)
 	int index;
 	void *list;
 
-//	if (hmap->elems_used > hmap->max_load)
-//		if (!ft_increase_hmap(hmap))
-//			return (FALSE);
-	index = hmap->func_hash(key) & (hmap->arr->elem_size - 1);
+	if (hmap->elems_used >= hmap->max_load)
+		if (!ft_increase_hmap(hmap))
+			return (FALSE);
+	index = hmap->func_hash(key) & (hmap->arr->elems_used - 1);
 	list = ft_arr_get(hmap->arr, index);
 	if (!(hmap->list.add(list, key, value)))
 		return (FALSE);
@@ -61,7 +74,7 @@ void	*ft_hashmap_get(t_hmap *hmap, void *key)
 	int index;
 	void *list;
 
-	index = hmap->func_hash(key) & (hmap->arr->elem_size - 1);
+	index = hmap->func_hash(key) & (hmap->arr->elems_used - 1);
 	list = ft_arr_get(hmap->arr, index);
 	return (hmap->list.find(list, key));
 }
