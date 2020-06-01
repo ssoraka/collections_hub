@@ -22,6 +22,7 @@ void	ft_del_arr_without_del_content(t_arr *arr, t_ilist *ilist)
 
 	while ((elem = ft_arr_get_next(arr)))
 		ilist->del_list_without_key_value(elem);
+	arr->func_del = NULL;
 	ft_del_arr(&arr);
 }
 

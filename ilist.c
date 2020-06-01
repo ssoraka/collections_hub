@@ -22,25 +22,9 @@ void	ft_ilist_set_get_next(t_ilist *list, int (*get_next)(void *, void **, void 
 	list->get_next = get_next;
 }
 
-void	ft_ilist_set_func_del_elem(t_ilist *list, void **ptr_on_del_elems)
-{
-	list->shift_del_elems = (long)ptr_on_del_elems - (long)list->mem;
-}
-
 void	ft_ilist_set_func_for_resize_map(t_ilist *list, void (*del_list_without_key_value)(void *))
 {
 	list->del_list_without_key_value = del_list_without_key_value;
-}
-
-void	ft_ilist_set_clear_func_del_elem(t_ilist *list, void *mem)
-{
-	long *ptr;
-
-	if (list->shift_del_elems > 0 && list->shift_del_elems < list->size)
-	{
-		ptr = (long *)((char *)mem + list->shift_del_elems);
-		*ptr = 0;
-	}
 }
 
 void	ft_ilist_set_list(t_ilist *ilist, void *list, int elem_size)

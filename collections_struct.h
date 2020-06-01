@@ -44,7 +44,6 @@ typedef struct		s_ilist
 	void			(*del)(void *);
 	int				(*get_next)(void *, void **, void **);
 	void			(*del_list_without_key_value)(void *);
-	int				shift_del_elems;
 	int				size;
 }					t_ilist;
 

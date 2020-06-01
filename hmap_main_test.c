@@ -44,6 +44,7 @@ int get_next(void *list, void **key, void **value)
 void	del_list_without_key_value(void *list)
 {
 	((t_rbtr *)list)->func_del = NULL;
+	ft_del_rbtree_nodes((t_rbtr *)list);
 }
 
 int func_hash(void *key)
@@ -64,7 +65,6 @@ t_hmap	*ft_create_hmap()
 	ft_ilist_set_get(&list, find);
 	ft_ilist_set_del(&list, del);
 	ft_ilist_set_get_next(&list, get_next);
-	ft_ilist_set_func_del_elem(&list, (void **)&tree->func_del);
 	ft_ilist_set_list(&list, (void *)tree, sizeof(t_rbtr));
 	ft_ilist_set_func_for_resize_map(&list, del_list_without_key_value);
 
