@@ -19,7 +19,7 @@
 # include <sys/types.h>
 # include <sys/uio.h>
 # include <fcntl.h>
-# define BUFF_SIZE 10
+# define BUFF_SIZE 1
 # define TRUE 1
 # define FALSE 0
 # define SUCCESS 0
@@ -39,14 +39,15 @@ typedef struct		s_list
 t_list				*ft_lstnew(void const *content, size_t content_size);
 void				ft_lstdelone(t_list **alst, void (*del)(void *, size_t));
 void				ft_lstdel(t_list **alst, void (*del)(void *, size_t));
-void				ft_lstadd(t_list **alst, t_list *lnew);
+void				ft_lstadd(t_list **alst, t_list *new);
 void				ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
 void				*ft_memset (void *dest, int c, size_t n);
-void				ft_memset8(void *dst, size_t chr, int size);
+void				*ft_memset8(void *dest, int c, size_t n);
 void				ft_bzero(void *s, size_t n);
+void				ft_bzero8(void *s, size_t n);
 void				*ft_memcpy(void *dst, const void *src, size_t n);
-void				ft_memcpy8(void *dst, void *src, size_t size);
+void				*ft_memcpy8(void *dst, const void *src, size_t n);
 void				*ft_memccpy (void *dst, const void *src, int c, size_t n);
 void				*ft_memmove (void *dst, const void *src, size_t n);
 void				*ft_memchr(const void *s, int c, size_t n);
@@ -102,7 +103,6 @@ void				ft_memdel(void **ap);
 int					get_next_line(const int fd, char **line);
 void				ft_str_arr_free(char ***str);
 void				ft_int_arr_free(int ***arr, int row);
-void				**ft_mem_arr_new(int row, int column, int size);
 char				**ft_str_arr_new(int row, int column);
 int					**ft_int_arr_new(int row, int column);
 int					ft_isspace(int c);

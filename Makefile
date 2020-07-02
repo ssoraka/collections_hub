@@ -10,35 +10,44 @@
 #                                                                              #
 #******************************************************************************#
 
-NAME1 = list
-NAME2 = arr
-NAME3 = rbtree
-NAME4 = hmap
+LIB = libcol.a
+NAME1 = test/list
+NAME2 = test/arr
+NAME3 = test/rbtree
+NAME4 = test/hmap
 
 C_FLAGS = -g
+
+HEADER = .
 
 LIBFT = libft.a
 LIBFT_HEADER = -I ./
 OBJ = arr.c llist.c lnode.c rbtree.c tnode.c hmap.c ilist.c
 
 
-all: thmap ttree tarr tlist
+$(LIB): $(OBJ)
+	@ar rc $(LIB) $(OBJ)
+	ranlib $(LIB)
 
+%.o: %.c
+	@$(CC) $(CFLAGS) $< -o $@ -I $(HEADER)
+
+test: thmap ttree tarr tlist
 
 thmap:
-	gcc -o $(NAME4) hmap_main_test.c $(OBJ) $(LIBFT) $(LIBFT_HEADER)
+	gcc -o $(NAME4) ./test/hmap_main_test.c $(OBJ) $(LIBFT) $(LIBFT_HEADER)
 	./$(NAME4)
 
 ttree:
-	gcc -o $(NAME3) rbtree_main_test.c $(OBJ) $(LIBFT) $(LIBFT_HEADER)
+	gcc -o $(NAME3) ./test/rbtree_main_test.c $(OBJ) $(LIBFT) $(LIBFT_HEADER)
 	./$(NAME3)
 
 tarr:
-	gcc -o $(NAME2) arr_main_test.c $(OBJ) $(LIBFT) $(LIBFT_HEADER)
+	gcc -o $(NAME2) ./test/arr_main_test.c $(OBJ) $(LIBFT) $(LIBFT_HEADER)
 	./$(NAME2)
 
 tlist:
-	gcc -o $(NAME1) list_main_test.c $(OBJ) $(LIBFT) $(LIBFT_HEADER)
+	gcc -o $(NAME1) ./test/list_main_test.c $(OBJ) $(LIBFT) $(LIBFT_HEADER)
 	./$(NAME1)
 
 norm:
@@ -48,6 +57,6 @@ clean:
 	rm -rf *.o
 
 fclean: clean
-	rm -rf $(NAME1) $(NAME2) $(NAME3) $(NAME4)
+	rm -rf $(LIB) $(NAME1) $(NAME2) $(NAME3) $(NAME4)
 
 re: fclean all
